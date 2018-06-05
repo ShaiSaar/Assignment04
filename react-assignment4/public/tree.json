@@ -1,0 +1,82 @@
+[
+  {
+    "type": "group",
+    "id": 1,
+    "name": "Friends",
+    "messages": [],
+    "items": [
+      {
+        "type": "group",
+        "name": "Best Friends",
+        "id": 2,
+        "items": [
+          {
+            "type": "user",
+            "name": "Tommy",
+            "id": 3
+          },
+          {
+            "type": "group",
+            "name": "family",
+            "id": 4,
+            "items": [
+              {
+                "type": "user",
+                "name": "Shai",
+                "id": 5
+
+              },
+              {
+                "type": "user",
+                "name": "Shira",
+                "id": 6
+              },
+              {
+                "type": "user",
+                "name": "Tahel",
+                "id": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "user",
+        "name": "Udi",
+        "id": 8
+      }
+    ]
+  },
+  {
+    "type": "user",
+    "name": "Ori",
+    "id": 9
+  },
+  {
+    "type": "user",
+    "name": "Roni",
+    "id": 10
+  },
+  {
+    "type": "group",
+    "name": "Guyss",
+    "id": 11,
+    "items": [
+      {
+        "type": "user",
+        "name": "Shai",
+        "id": 5
+      },
+      {
+        "type": "user",
+        "name": "Ariel",
+        "id": 12
+      },
+      {
+        "type": "user",
+        "name": "Ohad",
+        "id": 13
+      }
+    ]
+  }
+]
