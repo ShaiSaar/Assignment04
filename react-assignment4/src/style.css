@@ -226,3 +226,28 @@ header p {
     text-decoration: none;
     padding: 5px 10px;
 }
+.Tree-searchBar{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #fff;
+    padding: 2px;
+}
+.Tree-searchBar-input{
+    flex:5;
+    background-color: #4d595c;
+    color: white;
+    border: none;
+    user-focus-pointer: none;
+}
+.Tree-searchBar-input::placeholder{
+    color: white;
+}
+.Tree-searchBar-input:focus{
+    outline: none;
+}
+.Tree-searchBar-button{
+    padding-top: 2px;
+    color: #fff;
+    flex:1;
+    cursor: pointer;
+}
