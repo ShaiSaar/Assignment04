@@ -5,56 +5,70 @@ interface IInputBox {
     groupId: any;
     input: string
 }
-class InputBox extends React.Component <any,IInputBox>{
 
-    constructor(props:any){
+class InputBox extends React.Component <any, IInputBox> {
+
+    constructor(props: any) {
         super(props)
-        this.state={
+        this.state = {
             groupId: null,
-            input:""
+            input: ""
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.setState({
-            groupId:this.props.idGroup
+            groupId: this.props.idGroup
         })
     }
-    componentDidUpdate(){
-        if(this.props.idGroup!==this.state.groupId){
+
+    componentDidUpdate() {
+        if (this.props.idGroup !== this.state.groupId) {
             this.setState({
-                groupId:this.props.idGroup
+                groupId: this.props.idGroup
             })
         }
     }
-    clickHandler=()=>{
-        MessageStore.getInstance().set(this.state.groupId.toString(),this.state.input)
+
+    clickHandler = () => {
+        if(this.state.groupId===null) {
+            this.clearInput()
+            return
+        }
+        MessageStore.getInstance().set(this.state.groupId.toString(), this.state.input)
         this.clearInput()
         this.props.renderApp()
 
 
     }
 
-    clearInput = ()=>{
+    clearInput = () => {
         this.setState({
-            input:""
+            input: ""
         })
     }
-    setInput=(event:any)=>{
+    setInput = (event: any) => {
         this.setState({
             input: event.target.value
         })
     }
-    keyHandler= (e: any)=>{
-            if(e.key == 'Enter'){
-                this.clickHandler.bind(this);
+    keyHandler = (e: any) => {
+        // evt.keyCode == 13 && !evt.shiftKey
+        if (e.key == 'Enter') {
+            if(e.shiftKey){
+                console.log('enter + shift key press here! ')
+                return;
+            }else{
+                this.clickHandler();
                 console.log('enter press here! ')
             }
 
+        }
+
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div className="input-box">
                 <input type="text" onChange={this.setInput} placeholder="enter your message here" value={this.state.input} onKeyPress={this.keyHandler}/>
                 <button onClick={this.clickHandler}>send</button>
@@ -62,4 +76,5 @@ class InputBox extends React.Component <any,IInputBox>{
         )
     }
 }
+
 export default InputBox;

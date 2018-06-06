@@ -59,6 +59,21 @@ class Login extends React.Component <any,ILoginState>{
         })
     }
 
+    keyHandler = (e: any) => {
+        // evt.keyCode == 13 && !evt.shiftKey
+        if (e.key == 'Enter') {
+            if(e.shiftKey){
+                console.log('enter + shift key press here! ')
+                return;
+            }else{
+                this.clickHandler();
+                console.log('enter press here! ')
+            }
+
+        }
+
+    }
+
     setUsername=(event:any)=>{
         this.setState({
             username: event.target.value
@@ -77,8 +92,8 @@ class Login extends React.Component <any,ILoginState>{
                         <h2>Welcome</h2>
                         <h3>Sign in or Sign up</h3>
                         <div className="login-input-container">
-                            <input type="text" name="username" placeholder="Enter your username" onChange={this.setUsername} value={this.state.username}/>
-                            <input type="password" name="password" placeholder="Enter your password" onChange={this.setPassword} value={this.state.password}/>
+                            <input type="text"  placeholder="Enter your username" onChange={this.setUsername} value={this.state.username}/>
+                            <input type="password"  onKeyPress={this.keyHandler} placeholder="Enter your password" onChange={this.setPassword} value={this.state.password}/>
                         </div>
 
                         {this.state.showMsg? <h6 className="login-alertMsg">{this.state.msg}</h6>: null}
