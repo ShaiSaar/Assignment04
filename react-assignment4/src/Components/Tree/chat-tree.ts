@@ -12,11 +12,12 @@ function ChatTree(element:any) {
         clear();
         addLine(element);
         if(items.length>0){
-        element.firstElementChild.focus();
+        //element.firstElementChild.focus();
         }
     }
 
     function clear() {
+
         element.innerHTML = "";
     }
 

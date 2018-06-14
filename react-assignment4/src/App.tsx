@@ -18,7 +18,6 @@ class App extends React.Component <{}, IAppState> {
 
     state = {
         index: null,
-        // input: "",
         loginNeeded: true,
         username: "User",
         statusLogin: "Login"

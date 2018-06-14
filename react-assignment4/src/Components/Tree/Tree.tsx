@@ -13,10 +13,12 @@ class Tree extends React.Component<any, ITreeState> {
     myRef: any;
     setIndex: Function;
     userLogedIn: boolean;
+    mySearch: any
+    onElementSelectHandler: boolean
 
     constructor(props: {}) {
         super(props);
-
+        this.onElementSelectHandler = false
         this.userLogedIn = true;
         this.setIndex = () => {
         };
@@ -26,6 +28,22 @@ class Tree extends React.Component<any, ITreeState> {
         }
     }
 
+    searchOnTree1 = (val:string) => {
+        let input = val
+        const chatTree = ChatTree(this.myRef.current)
+
+        this.getTree()
+            .then((result: any) => {
+                if (input.length !== 0) {
+                    let arrResults = this.getSearchResults(result, input)
+                    chatTree.load(arrResults);
+                } else {chatTree.load(result);}
+                if(!this.onElementSelectHandler) {
+                    this.onElementSelectHandler = !this.onElementSelectHandler
+                    events.on("changeOnActiveElement", this.chooseElement)
+                }
+            })
+    }
 
     searchOnTree = () => {
         let input = this.state.searchInput
@@ -35,37 +53,25 @@ class Tree extends React.Component<any, ITreeState> {
             .then((result: any) => {
                 if (input.length !== 0) {
                     let arrResults = this.getSearchResults(result, input)
-                    // arrResults = [...new Set(arrResults)]
                     chatTree.load(arrResults);
-                } else {
-                    chatTree.load(result);
+                } else {chatTree.load(result);}
+                if(!this.onElementSelectHandler) {
+                    this.onElementSelectHandler = !this.onElementSelectHandler
+                    events.on("changeOnActiveElement", this.chooseElement)
                 }
-
-                events.on("changeOnActiveElement", this.chooseElement)
-                //this.myRef.current.focus();
             })
     }
 
     getSearchResults = (tree: any, input: string) => {
         let arrResults: any = [];
-        //let objResults: any = {};
-
         function search(arr: any) {
             for (let entry of arr) {
-                if (entry.name.toUpperCase().includes(input.toUpperCase())) {
-                    //objResults[entry.name]=entry
-                    arrResults.push(entry)
-                }
-                if (entry.type === "group") {
-                    search(entry.items)
-                }
+                if (entry.name.toUpperCase().includes(input.toUpperCase())) arrResults.push(entry)
+                if (entry.type === "group") {search(entry.items)}
             }
         }
 
         search(tree);
-        // for(let entry in objResults){
-        //     arrResults.push(entry)
-        // }
         let tmp = Array.from(arrResults, obj => JSON.stringify(obj));
         let filtered = Array.from(Array.from(new Set(tmp)), obj => JSON.parse(obj));
 
@@ -77,7 +83,10 @@ class Tree extends React.Component<any, ITreeState> {
             .then((result: any) => {
                 if (show) {
                     chatTree.load(result);
-                    events.on("changeOnActiveElement", this.chooseElement)
+                    if(!this.onElementSelectHandler) {
+                        this.onElementSelectHandler = !this.onElementSelectHandler
+                        events.on("changeOnActiveElement", this.chooseElement)
+                    }
                 } else {
                     chatTree.load([]);
                 }
@@ -87,7 +96,6 @@ class Tree extends React.Component<any, ITreeState> {
     }
 
     componentDidMount() {
-        console.log("componentDidMount")
         this.userLogedIn = this.props.showTree;
         this.setIndex = this.props.pickedIndex
         if (!this.props.showTree) {
@@ -97,8 +105,6 @@ class Tree extends React.Component<any, ITreeState> {
     }
 
     componentDidUpdate() {
-        // console.log("Tree: this.props.showTree",this.props.showTree)
-        // console.log("Tree: this.userLogedIn",this.userLogedIn)
         if (this.userLogedIn !== this.props.showTree) {
             this.userLogedIn = this.props.showTree
             if (!this.props.showTree) {
@@ -124,6 +130,12 @@ class Tree extends React.Component<any, ITreeState> {
 
     };
 
+    filter = () =>{
+        const val = this.mySearch.value
+        console.log(val)
+        this.searchOnTree1(val)
+        //this.mySearch.focus()
+    }
     setSearchInput = (event: any) => {
         this.setState({
             searchInput: event.target.value
@@ -136,22 +148,15 @@ class Tree extends React.Component<any, ITreeState> {
         const searchBar = () => {
             return (
                 <div className="Tree-searchBar">
-                    <input className="Tree-searchBar-input" type="text" onChange={this.setSearchInput} value={this.state.searchInput} placeholder="Search..."/>
-                    <i onClick={this.searchOnTree} className="fas fa-search Tree-searchBar-button"/>
-                    {/*onClick={this.searchOnTree(this.state.searchInput)}*/}
+                    {/*<input className="Tree-searchBar-input" type="text" onChange={this.setSearchInput} value={this.state.searchInput} placeholder="Search..."/>*/}
+                    <input className="Tree-searchBar-input" type="text" ref={(value)=> this.mySearch = value} onChange={this.filter}  placeholder="Search..."/>
+                    {/*<i onClick={this.searchOnTree} className="fas fa-search Tree-searchBar-button"/>*/}
                 </div>)
         }
         return (
 
             <section className="tree">
                 {(!this.props.showTree) ? searchBar() : null}
-
-                {/*<input type="text" onChange={this.setSearchInput} value={this.state.searchInput} placeholder="Search..."/>*/}
-                {/*<p onClick={this.props.pickedIndex.bind(null, 1)} style={style}>paragraph one</p>*/}
-                {/*<p onClick={this.props.pickedIndex.bind(null, 2)} style={style}>paragraph two</p>*/}
-                {/*<p onClick={this.props.pickedIndex.bind(null, 3)} style={style}>paragraph three</p>*/}
-                {/*<p onClick={this.props.pickedIndex.bind(null, 4)} style={style}>paragraph four</p>*/}
-                {/*<p onClick={this.getIndex} style={style}>paragraph four</p>*/}
                 <ul tabIndex={0} ref={this.myRef}/>
             </section>
 
